@@ -18,14 +18,18 @@ const createRouter = (db) => {
 
     router.post('/', (req, res) => {
         const category = req.body;
-        db.query("INSERT INTO categories SET ?", [category], (error, results) => {
-            if (error) {
-                console.log(error);
-                res.sendStatus(400);
-            }
-            category.id = results.insertId;
-            res.send(category);
-        })
+        if (category.title === undefined) {
+            res.status(400).send({"error": "Title must be filled"});
+        } else {
+            db.query("INSERT INTO categories SET ?", [category], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                category.id = results.insertId;
+                res.send(category);
+            })
+        }
     });
 
     router.delete('/:id', (req, res) => {

@@ -37,14 +37,18 @@ const createRouter = (db) => {
         if (req.file) {
             item.image = req.file.filename;
         }
-        db.query("INSERT INTO item SET ?", [item], (error, results) => {
-            if (error) {
-                console.log(error);
-                res.sendStatus(400);
-            }
-            item.id = results.insertId;
-            res.send(item);
-        })
+        if (item.title === undefined || item.category_id === undefined || item.place_id === undefined) {
+            res.status(400).send({"error": "Title and id must be filled"});
+        } else {
+            db.query("INSERT INTO item SET ?", [item], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                item.id = results.insertId;
+                res.send(item);
+            })
+        }
     });
 
     router.delete('/:id', (req, res) => {
@@ -62,12 +66,15 @@ const createRouter = (db) => {
         if (req.file) {
             item.image = req.file.filename;
         }
-        db.query("UPDATE item SET ? WHERE id = ?", [req.body, req.params.id], (err, result) => {
-            if (err) return res.sendStatus(400);
-            item.id = req.params.id;
-            res.send(item);
-        });
-
+        if (item.title === undefined || item.category_id === undefined || item.place_id === undefined) {
+            res.status(400).send({"error": "Title and id must be filled"});
+        } else {
+            db.query("UPDATE item SET ? WHERE id = ?", [req.body, req.params.id], (err, result) => {
+                if (err) return res.sendStatus(400);
+                item.id = req.params.id;
+                res.send(item);
+            });
+        }
     });
 
     return router;

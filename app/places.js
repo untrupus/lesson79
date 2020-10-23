@@ -18,14 +18,18 @@ const createRouter = (db) => {
 
     router.post('/', (req, res) => {
         const place = req.body;
-        db.query("INSERT INTO places SET ?", [place], (error, results) => {
-            if (error) {
-                console.log(error);
-                res.sendStatus(400);
-            }
-            place.id = results.insertId;
-            res.send(place);
-        })
+        if (place.title === undefined) {
+            res.status(400).send({"error": "Title must be filled"});
+        } else {
+            db.query("INSERT INTO places SET ?", [place], (error, results) => {
+                if (error) {
+                    console.log(error);
+                    res.sendStatus(400);
+                }
+                place.id = results.insertId;
+                res.send(place);
+            });
+        }
     });
 
     router.delete('/:id', (req, res) => {

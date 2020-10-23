@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS item (
     title VARCHAR (30) NOT NULL,
     description TEXT (2000),
 	image VARCHAR (30),
+	datetime DATETIME,
     category_id INT NOT NULL,
     CONSTRAINT FK_category
     FOREIGN KEY (category_id)

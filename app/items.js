@@ -33,6 +33,7 @@ const createRouter = (db) => {
 
     router.post('/', upload.single("image"), (req, res) => {
         const item = req.body;
+        item.datetime = new Date();
         if (req.file) {
             item.image = req.file.filename;
         }
@@ -56,13 +57,17 @@ const createRouter = (db) => {
         });
     });
 
-    router.put('/:id', (req, res) => {
-        const category = req.body;
+    router.put('/:id', upload.single("image"), (req, res) => {
+        const item = req.body;
+        if (req.file) {
+            item.image = req.file.filename;
+        }
         db.query("UPDATE item SET ? WHERE id = ?", [req.body, req.params.id], (err, result) => {
             if (err) return res.sendStatus(400);
-            category.id = req.params.id;
-            res.send(category);
+            item.id = req.params.id;
+            res.send(item);
         });
+
     });
 
     return router;

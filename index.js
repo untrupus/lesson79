@@ -12,8 +12,8 @@ const connection = mysql.createConnection(config.db);
 app.use(express.json());
 app.use(express.static('public'));
 app.use("/categories", categories(connection));
-// app.use("/items", items);
-app.use("/places", places);
+app.use("/items", items(connection));
+app.use("/places", places(connection));
 
 connection.connect((err) => {
    if (err) {

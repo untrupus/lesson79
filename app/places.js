@@ -17,14 +17,14 @@ const createRouter = (db) => {
     });
 
     router.post('/', (req, res) => {
-        const category = req.body;
-        db.query("INSERT INTO places SET ?", [category], (error, results) => {
+        const place = req.body;
+        db.query("INSERT INTO places SET ?", [place], (error, results) => {
             if (error) {
                 console.log(error);
                 res.sendStatus(400);
             }
-            category.id = results.insertId;
-            res.send(category);
+            place.id = results.insertId;
+            res.send(place);
         })
     });
 
@@ -33,17 +33,17 @@ const createRouter = (db) => {
             if (err) {
                 console.log(err);
                 return res.sendStatus(400)
-            };
+            }
             res.send('success');
         });
     });
 
     router.put('/:id', (req, res) => {
-        const category = req.body;
+        const place = req.body;
         db.query("UPDATE places SET ? WHERE id = ?", [req.body, req.params.id], (err, result) => {
             if (err) return res.sendStatus(400);
-            category.id = req.params.id;
-            res.send(category);
+            place.id = req.params.id;
+            res.send(place);
         });
     });
 
